@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .forms import *
 
-# Create your views here.
+def payment_view(request):
+  form=PaymentForm()
+  return render(request,'Home-pay-view.html',{'form':form})
