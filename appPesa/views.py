@@ -88,7 +88,12 @@ def payment_view(request):
       phone = form.cleaned_data['phone_namber']
       amount = int(form.cleaned_data['amount'])
       response = initiate_stk_push(phone, amount)
-      return JsonResponse(response)
+      
+      if response.get('ResponseCode') == '0':
+          return render(request, 'success.html')
+    else:
+          errormessage = response.get('errormessage', 'An error occurred while sending STK push request')
+          return render(request, 'Home-pay-view.html', {'form':form, 'error': errormessage})
   else:
     form = PaymentForm()
   return render(request, 'Home-pay-view.html', {'form': form})
@@ -102,3 +107,6 @@ def format_phone_number(phone):
         return f"254{phone[1:]}"
     else:
         raise ValueError("Invalid phone number format")
+      
+# def success_view(request):
+#   return render(request, 'success.html')
